@@ -1,0 +1,6 @@
+beautifulsoup4==4.6.3
+fantalytix-python-crawler==1.0
+fantalytix-python-ingestion==1.0
+fantalytix-sqlalchemy==1.0
+psycopg2==2.7.6.1
+SQLAlchemy==1.2.15
