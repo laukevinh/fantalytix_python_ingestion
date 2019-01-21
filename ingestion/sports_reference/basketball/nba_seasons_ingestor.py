@@ -1,4 +1,5 @@
-"""This class uses the fantalytix_python_crawler package to parse and 
+"""This class ingests all NBA, ABA, and BAA seasons.
+It uses the fantalytix_python_crawler package to parse and 
 SQLAlchemy package to preserve the data. The fantalytix_sqlalchemy package
 contains the models.
 """
