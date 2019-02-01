@@ -6,8 +6,6 @@ from flask import current_app, g
 from .utils import log_caller
 
 def get_db():
-    import pdb
-    pdb.set_trace()
     if current_app.config.get('DATABASE') is None:
         raise Exception("Database not configured")
 
