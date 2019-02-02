@@ -24,14 +24,31 @@ def leagues():
 
         db = get_db()
 
-        num_created = 0
+        instances = []
         for row in data['data']:
             instance, created = get_or_create(db, League, **row)
-            num_created += 1 if created else 0
+            if created:
+                instances.append(instance)
+        
+        fields_to_expose = ('name', 'abbreviation', 'sport')
+
+        results = expose(instances, fields_to_expose)
+
+        for result in results:
+            result["links"] = {
+                "rel": result['abbreviation'],
+                "href": url_for('api.leagues_abbreviation', abbreviation=result['abbreviation'])
+            }
 
         commit_or_400(db, msg="Could not create objects")
 
-        return jsonify({"count": num_created})
+        return jsonify({
+            "data": results,
+            "count": len(results),
+            "links": {
+                "self": url_for('api.leagues')
+            }
+        })
 
     elif request.method == 'DELETE':
         db = get_db()
@@ -45,4 +62,37 @@ def leagues():
 
     results = expose(get_db().query(League).all(), fields_to_expose)
 
-    return jsonify({'data': results, 'count': len(results)})
+    return jsonify({
+        'data': results, 
+        'count': len(results), 
+        'links': {
+            'self': url_for('api.leagues')
+        }
+    })
+
+@bp.route('/leagues/<string:abbreviation>', methods=['GET', 'DELETE'])
+def leagues_abbreviation(abbreviation):
+    """GET returns one record. POST not allowed. DELETE removes this record."""
+    if request.method == 'DELETE':
+        db = get_db()
+        num_deleted = db.query(League).filter_by(
+            abbreviation=abbreviation).delete()
+
+        commit_or_400(db, msg="Could not delete objects")
+
+        return jsonify({'count': num_deleted})
+
+    fields_to_expose = ('name', 'abbreviation', 'sport')
+
+    results = expose(
+        get_db().query(League).filter_by(abbreviation=abbreviation), 
+        fields_to_expose
+    )
+
+    return jsonify({
+        'data': results, 
+        'count': len(results), 
+        'links': {
+            'self': url_for('api.leagues_abbreviation', abbreviation=abbreviation)
+        }
+    })
