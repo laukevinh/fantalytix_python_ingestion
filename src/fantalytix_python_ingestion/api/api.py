@@ -46,7 +46,8 @@ def leagues():
             "data": results,
             "count": len(results),
             "links": {
-                "self": url_for('api.leagues')
+                "rel": 'self',
+                "href": url_for('api.leagues')
             }
         })
 
@@ -62,11 +63,18 @@ def leagues():
 
     results = expose(get_db().query(League).all(), fields_to_expose)
 
+    for result in results:
+        result["links"] = {
+            "rel": result['abbreviation'],
+            "href": url_for('api.leagues_abbreviation', abbreviation=result['abbreviation'])
+        }
+
     return jsonify({
         'data': results, 
         'count': len(results), 
         'links': {
-            'self': url_for('api.leagues')
+            "rel": 'self',
+            "href": url_for('api.leagues')
         }
     })
 
@@ -93,6 +101,7 @@ def leagues_abbreviation(abbreviation):
         'data': results, 
         'count': len(results), 
         'links': {
-            'self': url_for('api.leagues_abbreviation', abbreviation=abbreviation)
+            'rel': 'self',
+            'href': url_for('api.leagues_abbreviation', abbreviation=abbreviation)
         }
     })

@@ -18,6 +18,14 @@ def get_or_create(session, model, **kwargs):
         session.flush()
         return instance, True
 
+def apifmt(data, links):
+
+    return {
+        "data": data,
+        "links": None,
+        "count": len(data)
+    }
+
 def commit_or_400(session, msg="Could not process request", status=400):
     try:
         session.commit()
