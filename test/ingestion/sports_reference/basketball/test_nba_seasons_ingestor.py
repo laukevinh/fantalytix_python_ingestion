@@ -15,7 +15,7 @@ from fantalytix_python_ingestion.ingestion.sports_reference.basketball\
 
 from fantalytix_sqlalchemy.orm.common.league import League
 from fantalytix_sqlalchemy.orm.common.season import Season
-from ...settings import CONNECTION
+from ....settings import CONNECTION
 
 class TestNBASeasonsIngestor(unittest.TestCase):
     
