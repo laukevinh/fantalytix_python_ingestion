@@ -4,7 +4,7 @@ def log_caller(func):
     @functools.wraps(func)
     def log_before(*args, **kwargs):
         import inspect
-        print(" * called from", inspect.stack()[1].function) 
+        print(' * called from', inspect.stack()[1].function) 
         return func(*args, **kwargs)
     return log_before
 
@@ -18,15 +18,7 @@ def get_or_create(session, model, **kwargs):
         session.flush()
         return instance, True
 
-def apifmt(data, links):
-
-    return {
-        "data": data,
-        "links": None,
-        "count": len(data)
-    }
-
-def commit_or_400(session, msg="Could not process request", status=400):
+def commit_or_400(session, msg='Could not process request', status=400):
     try:
         session.commit()
     except:
