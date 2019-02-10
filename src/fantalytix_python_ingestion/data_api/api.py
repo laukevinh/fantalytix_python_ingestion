@@ -9,6 +9,10 @@ from .db import get_db, expose
 
 from .utils import get_or_create, commit_or_400
 
+from .schema import LeagueSchema
+
+leagues_schema = LeagueSchema(strict=True, many=True)
+league_schema = LeagueSchema(strict=True)
 bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/leagues', methods=['GET', 'POST', 'DELETE'])
@@ -30,26 +34,11 @@ def leagues():
             if created:
                 instances.append(instance)
         
-        fields_to_expose = ('name', 'abbreviation', 'sport')
-
-        results = expose(instances, fields_to_expose)
-
-        for result in results:
-            result['links'] = {
-                'rel': result['abbreviation'],
-                'href': url_for('api.leagues_abbreviation', abbreviation=result['abbreviation'])
-            }
-
         commit_or_400(db, msg='Could not create objects')
 
-        return jsonify({
-            'data': results,
-            'count': len(results),
-            'links': {
-                'rel': 'self',
-                'href': url_for('api.leagues')
-            }
-        })
+        results = leagues_schema.dump(instances)
+
+        return jsonify(results.data)
 
     elif request.method == 'DELETE':
         db = get_db()
@@ -59,8 +48,6 @@ def leagues():
 
         return jsonify({'count': num_deleted})
 
-    from .schema import LeagueSchema
-    leagues_schema = LeagueSchema(strict=True, many=True)
     results = leagues_schema.dump(get_db().query(League).all())
 
     return jsonify(results.data)
@@ -81,8 +68,6 @@ def leagues_abbreviation(abbreviation):
 
         return jsonify({'count': num_deleted})
 
-    from .schema import LeagueSchema
-    league_schema = LeagueSchema(strict=True)
     results = league_schema.dump(
         get_db().query(League).filter_by(abbreviation=abbreviation).first()
     )
