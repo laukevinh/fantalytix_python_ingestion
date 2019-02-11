@@ -23,9 +23,5 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-def expose(array, keys):
-    """Returns an array of dictionaries with only the specified keys."""
-    return [{ key : el.__dict__.get(key) for key in keys } for el in array]
-
 def init_app(app):
     app.teardown_appcontext(close_db)
