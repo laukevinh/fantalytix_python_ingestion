@@ -11,13 +11,12 @@ from .utils import get_or_create, commit_or_400
 
 from .schema import LeagueSchema
 
-leagues_schema = LeagueSchema(strict=True, many=True)
 league_schema = LeagueSchema(strict=True)
 bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/leagues', methods=['GET'])
 def leagues():
-    results = leagues_schema.dump(get_db().query(League).all())
+    results = league_schema.dump(get_db().query(League).all(), many=True)
 
     return jsonify(results.data)
 

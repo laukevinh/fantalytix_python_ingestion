@@ -1,5 +1,7 @@
 import json
 
+from marshmallow import post_dump
+
 from flask_marshmallow import Schema
 from flask_marshmallow.fields import Hyperlinks, URLFor
 
@@ -7,27 +9,38 @@ from flask import url_for
 
 class BaseSchema(Schema):
 
-    def wrap(self, results, self_href):
-        return results._replace(
-            data={
-                'data': results.data,
-                'count': len(results.data),
-                'links': {
-                    'rel': 'self',
-                    'href': self_href
-                }
+    __link_rel__ = {
+        'collection': None,
+        'record': None
+    }
+
+    def fix_nested_self_link_rels(self, data):
+        for entry in data:
+            entry['links']['rel'] = self.__link_rel__['record']
+
+    def wrap(self, data):
+        return {
+            'data': data,
+            'count': len(data),
+            'links': {
+                'rel': 'self',
+                'href': self.__link_rel__['collection']
             }
-        )
+        }
 
-    def dump(self, arg):
-        if self.many is True:
-            results = super().dump(arg)
-            self.add_links(results)
-            return self.wrap(results, self_href=url_for(self.ENDPOINT))
-
-        return super().dump(arg)
+    @post_dump(pass_many=True)
+    def wrap_links_if_many(self, data, many):
+        if many is True:
+            self.fix_nested_self_link_rels(data)
+            return self.wrap(data)
+        return data
 
 class LeagueSchema(BaseSchema):
+    __link_rel__ = {
+        'collection': '/api/leagues',
+        'record': '/api/leagues/abbreviation'
+    }
+
     class Meta:
         fields = ('name', 'abbreviation', 'sport', 'links')
 
@@ -35,9 +48,3 @@ class LeagueSchema(BaseSchema):
         'rel': 'self',
         'href': URLFor('api.leagues_abbreviation', abbreviation='<abbreviation>')
     })
-
-    ENDPOINT = 'api.leagues'
-
-    def add_links(self, results):
-        for result in results.data:
-            result['links']['rel'] = url_for(self.ENDPOINT) + '/abbreviation'
