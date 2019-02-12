@@ -7,8 +7,6 @@ from fantalytix_sqlalchemy.orm.common import League
 
 from .db import get_db
 
-from .utils import get_or_create, commit_or_400
-
 from .schema import LeagueSchema
 
 league_schema = LeagueSchema(strict=True)
