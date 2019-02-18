@@ -1,4 +1,3 @@
-"""This is a test for the NBASeasonsIngestor. """
 import unittest
 from datetime import date, datetime, timezone
 from urllib.request import urlopen
@@ -13,8 +12,7 @@ from fantalytix_python_crawler.crawler.sports_reference.basketball\
 from fantalytix_python_ingestion.ingestion.sports_reference.basketball\
     .nba_seasons_ingestor import NBASeasonsIngestor
 
-from fantalytix_sqlalchemy.orm.common.league import League
-from fantalytix_sqlalchemy.orm.common.season import Season
+from fantalytix_sqlalchemy.orm.common import League, Season
 from ....settings import CONNECTION
 
 class TestNBASeasonsIngestor(unittest.TestCase):
@@ -31,30 +29,21 @@ class TestNBASeasonsIngestor(unittest.TestCase):
             name='National Basketball Association',
             abbreviation='NBA',
             sport='basketball',
-            created_by='pycrawl',
-            creation_date=datetime.now(tz=timezone.utc),
-            last_updated_by=None,
-            last_updated_date=None)
+            created_by='pycrawl')
         )
 
         self.session.add(League(
             name='American Basketball Association',
             abbreviation='ABA',
             sport='basketball',
-            created_by='pycrawl',
-            creation_date=datetime.now(tz=timezone.utc),
-            last_updated_by=None,
-            last_updated_date=None)
+            created_by='pycrawl')
         )
 
         self.session.add(League(
             name='Basketball Association of America',
             abbreviation='BAA',
             sport='basketball',
-            created_by='pycrawl',
-            creation_date=datetime.now(tz=timezone.utc),
-            last_updated_by=None,
-            last_updated_date=None)
+            created_by='pycrawl')
         )
 
         self.session.commit()
@@ -126,15 +115,12 @@ class TestNBASeasonsIngestor(unittest.TestCase):
             abbreviation='NBA'
         ).first()
         season = Season(
-            league_id=league.id,
+            league=league,
             start_date=None,
             end_date=None,
             start_year=date(2018, 1, 1),
             end_year=date(2019, 1, 1),
             created_by='pycrawl',
-            creation_date=datetime.now(tz=timezone.utc),
-            last_updated_by=None,
-            last_updated_date=None
         )
         self.session.add(season)
 
@@ -159,15 +145,12 @@ class TestNBASeasonsIngestor(unittest.TestCase):
             abbreviation='NBA'
         ).one()
         season = Season(
-            league_id=league.id,
+            league=league,
             start_date=None,
             end_date=None,
             start_year=date(2016, 1, 1),
             end_year=date(2017, 1, 1),
-            created_by='pycrawl',
-            creation_date=datetime.now(tz=timezone.utc),
-            last_updated_by=None,
-            last_updated_date=None
+            created_by='pycrawl'
         )
         self.session.add(season)
         self.session.commit()
