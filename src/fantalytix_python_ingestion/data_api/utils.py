@@ -24,3 +24,13 @@ def commit_or_400(session, msg='Could not process request', status=400):
     except:
         session.rollback()
         return (msg, status)
+
+def crossdomain(origin=None):
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapped_function(*args, **kwargs):
+            resp = f(*args, **kwargs)
+            resp.headers.add('Access-Control-Allow-Origin', origin)
+            return resp
+        return wrapped_function
+    return decorator
