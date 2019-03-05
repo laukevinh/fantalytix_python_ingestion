@@ -5,7 +5,9 @@ from datetime import date
 from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
 
-from fantalytix_sqlalchemy.orm.common import League
+from fantalytix_sqlalchemy.orm.common import (
+    League, Season
+)
 
 from ..settings import CONNECTION
 
@@ -56,6 +58,29 @@ class TestAPI(unittest.TestCase):
 
     def tearDownLeaguesTable(self):
         self.session.query(League).delete()
+
+    def setUpSeasonsTable(self):
+        self.setUpLeaguesTable()
+
+        self.SEASON_API_URL = '/api/seasons'
+        self.SEASON_NBA_2019_API_URL = (
+            self.SEASON_API_URL + '/league/NBA/endyear/2019'
+        )
+
+        league = self.session.query(League).filter_by(abbreviation='NBA').one()
+        self.session.add(Season(
+            league=league,
+            start_date=date(2018, 10, 16),
+            end_date=date(2019, 4, 10),
+            start_year=date(2018, 1, 1),
+            end_year=date(2019, 1, 1))
+        )
+        self.session.commit()
+
+    def tearDownSeasonsTable(self):
+        self.tearDownLeaguesTable()
+
+        self.session.query(Season).delete()
 
 if __name__ == '__main__':
     unittest.main()
