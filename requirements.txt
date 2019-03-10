@@ -1,14 +1,16 @@
 beautifulsoup4==4.6.3
 Click==7.0
-
-git+https://github.com/laukevinh/fantalytix_python_crawler.git
-git+https://github.com/laukevinh/fantalytix_python_ingestion.git
-git+https://github.com/laukevinh/fantalytix_sqlalchemy.git
-
+-e git+https://laukevinh@bitbucket.org/wylsta/fantalytix_python_crawler.git@fac746dbf8d8810075ba80f75ae12c1c5b61735f#egg=FantalytixPythonCrawler
+-e git+https://laukevinh@bitbucket.org/wylsta/fantalytix_python_ingestion.git@0c29c90c9d002d41cc9a5886e219915b9c86fe64#egg=FantalytixPythonIngestion
+-e git+https://laukevinh@bitbucket.org/wylsta/fantalytix_sqlalchemy.git@5030f132ef417b3c6d5f2812d051e028fad16078#egg=FantalytixSQLAlchemy
 Flask==1.0.2
+Flask-API==1.1
+flask-marshmallow==0.9.0
 itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
+marshmallow==2.18.0
 psycopg2==2.7.6.1
+six==1.12.0
 SQLAlchemy==1.2.15
 Werkzeug==0.14.1
