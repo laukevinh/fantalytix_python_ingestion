@@ -54,7 +54,7 @@ $ pip uninstall MyProject
 More at https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
 """
 
-from setuptools import setup, find_packages, find_namespace_packages
+from setuptools import setup, find_packages
 setup(
     name='FantalytixPythonIngestion', 
     version='1.0', 
