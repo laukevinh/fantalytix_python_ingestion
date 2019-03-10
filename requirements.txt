@@ -1,6 +1,6 @@
 beautifulsoup4==4.6.3
 Click==7.0
--e git+https://github.com/laukevinh/fantalytix_python_crawler.git#egg=FantalytixPythonCrawler
+git+https://github.com/laukevinh/fantalytix_python_crawler.git@update_setup
 -e git+https://github.com/laukevinh/fantalytix_python_ingestion.git#egg=FantalytixPythonIngestion
 -e git+https://github.com/laukevinh/fantalytix_sqlalchemy.git#egg=FantalytixSQLAlchemy
 Flask==1.0.2
